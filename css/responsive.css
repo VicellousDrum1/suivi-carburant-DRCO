@@ -1,0 +1,55 @@
+/* ============================================================
+   RESPONSIVE — formulaire public
+   ============================================================ */
+
+/* Mobile-first : styles de base déjà optimisés petit écran dans style.css */
+
+/* Tablette */
+@media (min-width: 640px) {
+  .conteneur-public { max-width: 520px; }
+  .carte { padding: 36px 40px; }
+  .entete-public h1 { font-size: 1.7rem; }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .page--public { padding-top: 72px; }
+  .entete-public h1 { font-size: 1.85rem; }
+}
+
+/* ============================================================
+   RESPONSIVE — tableau des opérations (admin)
+   Sur smartphone : le tableau se transforme en cartes empilées.
+   ============================================================ */
+@media (max-width: 760px) {
+  table.tableau-operations thead { display: none; }
+
+  table.tableau-operations, table.tableau-operations tbody, table.tableau-operations tr, table.tableau-operations td {
+    display: block; width: 100%;
+  }
+
+  table.tableau-operations tr {
+    background: var(--color-surface);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 12px;
+    padding: 14px 16px;
+  }
+
+  table.tableau-operations td {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--color-border);
+    font-size: 0.88rem;
+  }
+  table.tableau-operations td:last-child { border-bottom: none; }
+
+  table.tableau-operations td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--color-muted);
+    flex-shrink: 0;
+  }
+}
