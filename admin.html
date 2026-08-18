@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Administration — Suivi carburant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/admin.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+<div id="toast-zone" class="toast-zone"></div>
+
+<!-- ======================= ÉCRAN DE CONNEXION ======================= -->
+<main id="ecran-connexion" class="ecran-connexion">
+  <div class="carte carte-connexion">
+    <svg class="jauge-signature" viewBox="0 0 120 72" width="60" height="36" aria-hidden="true">
+      <path d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="var(--color-border)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="var(--color-amber)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="40"/>
+    </svg>
+    <h1>Espace administrateur</h1>
+    <p class="sous-titre">Suivi carburant — accès réservé</p>
+    <form id="form-connexion" novalidate>
+      <label for="champ-email">Email</label>
+      <input type="email" id="champ-email" autocomplete="username" required />
+      <label for="champ-mdp">Mot de passe</label>
+      <input type="password" id="champ-mdp" autocomplete="current-password" required />
+      <p class="erreur-champ" id="erreur-connexion"></p>
+      <button type="submit" id="btn-connexion" class="btn-principal">Se connecter</button>
+    </form>
+  </div>
+</main>
+
+<!-- ======================= DASHBOARD ======================= -->
+<div id="app-admin" class="app-admin" hidden>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <svg viewBox="0 0 120 72" width="34" height="20" aria-hidden="true">
+        <path d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="var(--color-amber)" stroke-width="12" stroke-linecap="round"/>
+      </svg>
+      <span>Carburant</span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-vue="vue-dashboard">Tableau de bord</button>
+      <button class="nav-item" data-vue="vue-operations">Opérations</button>
+      <button class="nav-item" data-vue="vue-vehicules">Véhicules</button>
+      <button class="nav-item" data-vue="vue-sites">Sites</button>
+    </nav>
+    <button id="btn-deconnexion" class="nav-item nav-item--deconnexion">Déconnexion</button>
+  </aside>
+
+  <div class="contenu-admin">
+    <header class="topbar">
+      <button id="btn-menu-mobile" class="btn-menu-mobile" aria-label="Menu">☰</button>
+      <h1 id="titre-vue">TABLEAU DE BORD — SUIVI CARBURANT</h1>
+    </header>
+
+    <!-- ===== VUE : DASHBOARD ===== -->
+    <section id="vue-dashboard" class="vue">
+
+      <div class="barre-filtres" id="filtres-dashboard">
+        <select id="filtre-periode">
+          <option value="tous">Toute la période</option>
+          <option value="aujourdhui">Aujourd'hui</option>
+          <option value="semaine">Cette semaine</option>
+          <option value="mois">Ce mois</option>
+          <option value="mois-precedent">Mois précédent</option>
+          <option value="personnalise">Personnalisé…</option>
+        </select>
+        <input type="date" id="filtre-date-debut" class="filtre-date" hidden />
+        <input type="date" id="filtre-date-fin" class="filtre-date" hidden />
+        <select id="filtre-site-dashboard"><option value="">Tous les sites</option></select>
+      </div>
+
+      <div class="grille-stats">
+        <div class="carte-stat">
+          <span class="stat-label">Total des prises</span>
+          <span class="stat-valeur" id="stat-total-prises">—</span>
+        </div>
+        <div class="carte-stat carte-stat--amber">
+          <span class="stat-label">Montant total pris</span>
+          <span class="stat-valeur" id="stat-montant-pris">—</span>
+        </div>
+        <div class="carte-stat">
+          <span class="stat-label">Montant restant</span>
+          <span class="stat-valeur" id="stat-montant-restant">—</span>
+        </div>
+        <div class="carte-stat">
+          <span class="stat-label">Véhicules</span>
+          <span class="stat-valeur" id="stat-vehicules">—</span>
+        </div>
+        <div class="carte-stat">
+          <span class="stat-label">Sites</span>
+          <span class="stat-valeur" id="stat-sites">—</span>
+        </div>
+      </div>
+
+      <div class="grille-graphiques">
+        <div class="carte carte-graphique"><h3>Montant par site</h3><canvas id="graph-site"></canvas></div>
+        <div class="carte carte-graphique"><h3>Montant par véhicule</h3><canvas id="graph-vehicule"></canvas></div>
+        <div class="carte carte-graphique carte-graphique--large"><h3>Évolution des dépenses</h3><canvas id="graph-evolution"></canvas></div>
+        <div class="carte carte-graphique"><h3>Nombre de prises par site</h3><canvas id="graph-nb-site"></canvas></div>
+        <div class="carte carte-graphique"><h3>Top 10 véhicules — consommation</h3><canvas id="graph-top10"></canvas></div>
+      </div>
+    </section>
+
+    <!-- ===== VUE : OPÉRATIONS ===== -->
+    <section id="vue-operations" class="vue" hidden>
+      <div class="barre-filtres">
+        <input type="search" id="recherche-operations" placeholder="Rechercher (nom, immatriculation…)" />
+        <select id="filtre-site-operations"><option value="">Tous les sites</option></select>
+        <input type="date" id="filtre-op-debut" class="filtre-date" />
+        <input type="date" id="filtre-op-fin" class="filtre-date" />
+        <button id="btn-export-csv" class="btn-outline">Exporter CSV</button>
+        <button id="btn-export-xlsx" class="btn-outline">Exporter Excel</button>
+      </div>
+
+      <div class="carte carte-tableau">
+        <table class="tableau-operations">
+          <thead>
+            <tr>
+              <th data-tri="date_prise">Date ⇅</th>
+              <th>Heure</th>
+              <th data-tri="site">Site ⇅</th>
+              <th data-tri="nom">Nom</th>
+              <th>Prénom</th>
+              <th data-tri="immatriculation">Immatriculation ⇅</th>
+              <th data-tri="index_km">Index ⇅</th>
+              <th>Km parcouru</th>
+              <th data-tri="montant_pris">Montant pris ⇅</th>
+              <th>Reste</th>
+            </tr>
+          </thead>
+          <tbody id="corps-tableau-operations"></tbody>
+        </table>
+        <div class="pagination" id="pagination-operations"></div>
+      </div>
+    </section>
+
+    <!-- ===== VUE : VÉHICULES ===== -->
+    <section id="vue-vehicules" class="vue" hidden>
+      <div class="barre-filtres">
+        <button id="btn-ajouter-vehicule" class="btn-principal btn-principal--auto">+ Ajouter un véhicule</button>
+      </div>
+      <div class="carte carte-tableau">
+        <table class="tableau-operations" id="tableau-vehicules">
+          <thead>
+            <tr><th>Immatriculation</th><th>Site</th><th>Description</th><th>Statut</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="corps-tableau-vehicules"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== VUE : SITES ===== -->
+    <section id="vue-sites" class="vue" hidden>
+      <div class="barre-filtres">
+        <button id="btn-ajouter-site" class="btn-principal btn-principal--auto">+ Ajouter un site</button>
+      </div>
+      <div class="carte carte-tableau">
+        <table class="tableau-operations" id="tableau-sites">
+          <thead><tr><th>Nom</th><th>Code</th><th>Statut</th><th>Actions</th></tr></thead>
+          <tbody id="corps-tableau-sites"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- ===== MODALE GÉNÉRIQUE (véhicule / site) ===== -->
+<div id="modale" class="modale-fond" hidden>
+  <div class="modale-carte">
+    <h2 id="modale-titre">Titre</h2>
+    <form id="modale-form"></form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

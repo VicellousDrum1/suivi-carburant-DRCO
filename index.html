@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Suivi des prises de carburant</title>
+<meta name="description" content="Formulaire de saisie des prises de carburant des véhicules de la flotte." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+<main class="page page--public">
+  <div class="conteneur-public">
+
+    <header class="entete-public">
+      <svg class="jauge-signature" viewBox="0 0 120 72" width="72" height="44" aria-hidden="true">
+        <path d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="var(--color-border)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="var(--color-amber)" stroke-width="10" stroke-linecap="round"
+              stroke-dasharray="157" stroke-dashoffset="40" class="jauge-arc"/>
+        <line x1="60" y1="62" x2="88" y2="30" stroke="var(--color-navy)" stroke-width="4" stroke-linecap="round" class="jauge-aiguille"/>
+        <circle cx="60" cy="62" r="6" fill="var(--color-navy)"/>
+      </svg>
+      <h1>Suivi des prises de carburant</h1>
+      <p class="sous-titre">Veuillez renseigner les informations relatives à la prise de carburant.</p>
+    </header>
+
+    <div id="toast-zone" class="toast-zone"></div>
+
+    <section id="carte-formulaire" class="carte carte-formulaire">
+      <form id="form-carburant" novalidate>
+
+        <fieldset class="section-form">
+          <legend><span class="legend-num">01</span> Site</legend>
+          <label for="champ-site">Site / Exploitation <span class="requis">*</span></label>
+          <select id="champ-site" required>
+            <option value="">Chargement…</option>
+          </select>
+          <p class="erreur-champ" id="erreur-site"></p>
+        </fieldset>
+
+        <fieldset class="section-form">
+          <legend><span class="legend-num">02</span> Identité</legend>
+          <label for="champ-nom">Nom <span class="requis">*</span></label>
+          <input type="text" id="champ-nom" autocomplete="family-name" required />
+          <p class="erreur-champ" id="erreur-nom"></p>
+
+          <label for="champ-prenom">Prénom <span class="requis">*</span></label>
+          <input type="text" id="champ-prenom" autocomplete="given-name" required />
+          <p class="erreur-champ" id="erreur-prenom"></p>
+        </fieldset>
+
+        <fieldset class="section-form">
+          <legend><span class="legend-num">03</span> Véhicule</legend>
+          <label for="champ-vehicule">Immatriculation <span class="requis">*</span></label>
+          <select id="champ-vehicule" disabled required>
+            <option value="">Sélectionnez d'abord un site</option>
+          </select>
+          <p class="erreur-champ" id="erreur-vehicule"></p>
+        </fieldset>
+
+        <fieldset class="section-form">
+          <legend><span class="legend-num">04</span> Carburant</legend>
+
+          <label for="champ-index">Index kilométrique <span class="requis">*</span></label>
+          <input type="number" id="champ-index" inputmode="numeric" min="0" step="1" required />
+          <p class="info-champ" id="dernier-index-info"></p>
+          <p class="erreur-champ" id="erreur-index"></p>
+
+          <label for="champ-montant-pris">Montant pris (FCFA) <span class="requis">*</span></label>
+          <input type="number" id="champ-montant-pris" inputmode="numeric" min="0" step="1" required />
+          <p class="erreur-champ" id="erreur-montantPris"></p>
+
+          <label for="champ-montant-restant">Reste (FCFA)</label>
+          <input type="number" id="champ-montant-restant" inputmode="numeric" min="0" step="1" />
+          <p class="erreur-champ" id="erreur-montantRestant"></p>
+        </fieldset>
+
+        <button type="submit" id="btn-soumettre" class="btn-principal">Envoyer</button>
+      </form>
+    </section>
+
+    <section id="carte-confirmation" class="carte carte-confirmation" hidden>
+      <div class="icone-succes" aria-hidden="true">✓</div>
+      <h2>Enregistrement effectué avec succès</h2>
+      <div id="recap-contenu" class="recap"></div>
+      <button id="btn-nouvelle-saisie" class="btn-secondaire">Nouvelle saisie</button>
+    </section>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="js/form.js"></script>
+</body>
+</html>
