@@ -250,7 +250,7 @@ function initVueOperations() {
   $("btn-export-xlsx").addEventListener("click", () => exporterOperations("xlsx"));
 }
 
-async function requeteOperationsFiltree() {
+function requeteOperationsFiltree() {
   const { recherche, siteId, debut, fin, tri, ordre } = etat.operations;
   let requete = supabase.from("prises_carburant").select("*, sites(nom), vehicules(immatriculation)", { count: "exact" });
 
@@ -266,7 +266,7 @@ async function requeteOperationsFiltree() {
 
 async function chargerOperations() {
   const { page, parPage } = etat.operations;
-  const requete = await requeteOperationsFiltree();
+  const requete = requeteOperationsFiltree();
   const { data, error, count } = await requete.range((page - 1) * parPage, page * parPage - 1);
 
   if (error) { toast("Erreur lors du chargement des opérations.", "erreur"); return; }
@@ -303,7 +303,7 @@ function rendrePagination(total) {
 }
 
 async function exporterOperations(format) {
-  const requete = await requeteOperationsFiltree();
+  const requete = requeteOperationsFiltree();
   const { data, error } = await requete;
   if (error) { toast("Erreur lors de l'export.", "erreur"); return; }
 
