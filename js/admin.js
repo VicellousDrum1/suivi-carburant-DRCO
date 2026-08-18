@@ -2,8 +2,7 @@ import { toast, formatFCFA, formatNombre, formatDate, formatHeure, debounce } fr
 
 // Renseigner les mêmes valeurs que dans js/supabase.js (voir README, section 3)
 const SUPABASE_URL = "https://vicellousdrum1.github.io";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhZHR5ZG95bWFydHVmZ2J0aWV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5OTg2NTAsImV4cCI6MjEwMjU3NDY1MH0.yA_uHsEEqyWnhspYzNeKKEpvGQNIzQMGySPgqATUgbg
-";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhZHR5ZG95bWFydHVmZ2J0aWV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5OTg2NTAsImV4cCI6MjEwMjU3NDY1MH0.yA_uHsEEqyWnhspYzNeKKEpvGQNIzQMGySPgqATUgbg";
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* ============================================================
